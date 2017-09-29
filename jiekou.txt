@@ -1,0 +1,267 @@
+接口文档
+
+接口约定:
+	关于HTTP 请求的类型
+	测试URL：http://192.168.1.121/ditu/index.php/Sjia/sjias
+  所有的接口默认是 HTTP POST 
+	所有通过 POST 方式传递到接口(URL)的字段统称为参数
+  参数严格区分大小写
+
+	关于返回值：
+	{
+  	"code": "100", // 约定100 标志用户为未登陆状态
+  	"message": "请登陆",
+		“data”:””
+　}
+　code 为状态码，message 是方便前后台联调的提示信息(不建议依赖此进行编程)，当请求的接口有数据返回的时候，在 data 中指定。
+
+## 登陆 ##
+URL: Login/login
+传输方式：post
+参数:
+	用户账号：user
+  用户密码：pass
+	
+返回值:
+    {
+      code ：1 成功 0 失败
+    }
+
+##退出登录##
+URL:Login/outlogin
+返回：{
+       code：1成功 0失败
+      }
+
+
+## 用户信息 ##
+URL: User/userInfo
+传输方式：post
+参数:	
+返回值:
+    {
+    "code": "1",
+    "data": {
+        "id": "49",          信息表ID
+        "userId": "1",       用户ID
+        "name": "张三",      用户名
+        "name_n": "一杯酒",  用户昵称
+        "pic": "URL",        头像
+        "phone": "1388888888888", 手机
+        "age": "18",              年龄
+        "sex": "1",          1：男 2：女
+        "city": "北京",        城市
+        "rows": "111.00",      经度
+        "cols": "111.00",      纬度
+        "isOnline": "2",       是否在线 1代表在线 2代表离线
+        "isHidden": "2",       是否隐身 1代表开启 2代表关闭       
+        "time": "2017-07-09 15:43:19", 注册时间
+        "content": "像风一样自由"     个性签名
+    }
+}
+
+## 用户注册 ##
+URL:User/registera
+参数：用户名(手机号)：user
+               密码 ：pass
+            用户昵称：name_n
+         手机验证码 ：code
+            传输方式：post
+                返回：code 1 成功 0 失败
+
+## 用户修改密码 ##
+URL:User/updatea
+参数：用户名(手机号)：user
+               密码 ：pass
+         手机验证码 ：code
+            传输方式：post
+                返回：code 1 成功 0 失败
+
+
+## 更新或添加用户信息 ##
+URL: User/updateUser
+传输方式：post	     
+要修改的信息：	如果是更新操作则参数字段可以为空，添加操作则必须带上全部参数（isOnline and isHidden 参数可以为空）
+参数:	      
+		        "name":       用户名   
+		        "name_n":     用户昵称 
+		        "pic":        头像     
+		        "phone":      手机    
+		        "age":        年龄    
+		        "sex":       1：男 2：女 
+		        "city":        城市
+		        "rows":        经度
+		        "cols":        纬度		        
+		        "content":     个性签名
+            "isOnline":   1:在线 2：离线
+            "isHidden":   1:开启隐身  2：关闭隐身
+            返回：
+   code：1 成功 0失败
+   {
+    "code": "1",
+    "message": "更新成功"
+    }
+
+
+#查看个人行程#
+ URL：User/route
+ 参数： 无
+ 传输方式：post
+    返回：code 1 成功 0 失败
+         "data": {
+                "id": 主键id
+                "userId": userid
+                "rou": 行程内容
+                "time": 时间
+        }
+ 
+
+#添加个人行程#
+ URL：User/addRoute
+ 参数： 
+行程内容：rou
+传输方式：post
+    返回：code 1 成功 0 失败
+       
+  
+
+## 获取好友列表 ##
+URL:Friend/getFriend
+参数：
+传输方式：post
+返回：
+  “code”：1 成功 0 失败
+ "data": [
+        {
+            "pic": 头像
+            "name_n": 昵称
+            "content":个性签名
+            "isOnline": 是否在线
+        }      
+    ]
+
+## 添加好友 ##
+URL:Friend/addFriend
+参数：
+被添加用户id：id 
+            或
+被添加用户手机：phone
+传输方式：post
+返回：
+ "code":1成功 0 失败
+
+ ## 删除好友 ##
+ URL：Friend/deleteFriend
+ 参数：要删除的好友id ： friendId
+ 传输方式：post
+ 返回：code : 1 成功 0 失败
+
+## 好友查询 ##
+URL：Friend/likes
+传输方式：post
+参数： name_n : 用户昵称
+       phone  ：手机号
+       （两个参数选其一）
+返回：code： 1 成功 0失败
+   {
+    "code": "1",
+    "data": [
+        {
+            "name_n": "风一样",      用户昵称
+            "pic": "/dt/public/admin/images/2017-07-12/5965d15a20e90.png", 头像路径
+            "phone": "1666666688"     用户手机
+        }
+    ]
+}
+
+
+ ## 获取任务信息 ##
+ URL：Take/tasks
+ 返回：code 1 成功 0 失败
+     "data": [
+           {
+            "id": 任务id
+            "name": 任务名称
+            "pic": "admin/images/2017-07-10/59634e0c55c6b.jpg", 任务图片
+            "url": "www.tiantian.com",  任务链接
+            "content": "点击就能下载哦"  任务介绍
+           }
+
+
+## 发送消息·##
+URL：News/addNew
+参数：letterToId 被发送者ID
+      letter     消息内容
+返回：code 1 成功 0 失败
+
+## 查看个人消息库·##
+URL：News/lookNew
+参数：
+返回：code 1 成功 0 失败
+    "code": "1",
+    "data": [
+        {
+            "id":   消息ID
+            "letter": 消息内容
+            "userId": 用户id
+            "letterToId": 发送者ID
+            "time": "2017-07-09 15:55:21", 发送时间
+            "status": "0",1: 已读, 0: 未读(默认值)',
+            "form": "1"   1好友，2客服',
+        },
+
+## 删除消息 ##
+URL:News/omitNew
+参数：消息ID ：id
+传输方式：post
+返回:code: 1 成功 0 失败
+
+## 更新消息为已读状态（是否已读） ##
+URL：News/renewalNew
+参数：消息ID ：id
+传输方式：post
+返回：code： 1 成功 0 失败
+
+## 客服信息 ##
+URL：Sjia/sjias
+返回：code: 1 成功 0 失败
+     "data": {
+        "phone": "027-1321-8488",
+        "email": "111@163.com"
+    }
+
+//手机验证码
+   /*      url : User/captcha
+     参数 phone ：要发送的手机号
+     返回：code 1 请求成功
+           data 触发URL
+      –1  账号未注册
+      –2  网络访问超时，请稍后再试
+      –3  帐号或密码错误
+      -4  只支持单发
+      –5  余额不足，请充值
+      –6  定时发送时间不是有效的时间格式
+      -7  提交信息末尾未签名，请添加中文的企业签名【 】或未采用gb2312编码
+      –8  发送内容需在1到300字之间
+      -9  发送号码为空
+      -10 定时时间不能小于系统当前时间
+      -11 屏蔽手机号码
+      -100  限制IP访问
+   */
+
+
+//获取融云token
+    url : User/getToken
+    /*id ：用户id
+      name_n ：用户昵称
+      pic ：用户头像
+    返回值 ： 0 失败 1成功
+              token值
+    */
+
+
+
+
+
+
+
